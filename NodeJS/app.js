@@ -47,4 +47,15 @@ app.get('/formulario',(req,res)=>{
     res.sendFile(__dirname+'/views/index.html')
 })
 
+app.get('json',(req,res)=>{
+    let response;
+    if(process.env.MESSAGE_STYLE ==="uppercase"){
+        response ="Hello json".toUpperCase
+    
+    }else{
+        response="Hello json"
+    }
+    res.json({message:response})
+})
+
 module.exports = app
