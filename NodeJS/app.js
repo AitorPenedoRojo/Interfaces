@@ -1,9 +1,25 @@
 var express = require('express')
+var mysql = require('mysql')
+var con = mysql.createConnection({
+    host: "127.0.0.1",
+    port: "3308",
+    user: "root",
+    password: "Ad1234",
+    database : 'botanica'
+
+});
+con.connect(function (err) {
+    if (err) throw err;
+    console.log("Conexión con la BD!");
+});
+
 var app = express()
 var port=process.env.PORT || 3678
 var moment = require('moment')
 app.set('view engine','ejs')
-app.set('view engine','pug')
+
+//O pug o ejs, no los dos a la vez
+//app.set('view engine','pug')
 
 app.use(express.static(__dirname + '/public'))
 
@@ -47,6 +63,7 @@ app.get('/',(req,res)=>{
     res.render("index")
 })
 
+
 app.get('/fecha',(req,res)=>{
 
     let fecha = new Date()
@@ -55,6 +72,7 @@ app.get('/fecha',(req,res)=>{
 
 })
 
+//Web html
 app.get('/lista',(req,res)=>{
 
     res.send(`
@@ -70,6 +88,7 @@ app.get('/lista',(req,res)=>{
     `)
 })
 
+//Monta un json
 app.get('/dameJson',(req,res)=>{
     
     let objetoAlumno={
@@ -79,6 +98,7 @@ app.get('/dameJson',(req,res)=>{
 
     res.json(objetoAlumno)
 })
+
 
 app.get('/formulario',(req,res)=>{
     res.sendFile(__dirname+'/views/index.html')
@@ -102,6 +122,7 @@ app.get("/fechaYHora", middleware,(req,res)=>{
     })
 })
 
+//Meter parametros en la barra de busqueda
 app.get("/:numero/cuadrado",(req,res)=>{
 
     //let numero = req.params.numero
@@ -156,6 +177,26 @@ app.get("/pagina_ejs/:nombre", (req,res)=>{
     res.render("index2",
     {nombre:n.toUpperCase()})
 })
+
+//Bases de datos
+
+app.get("/baseDeDatos", (req,res)=>{
+    const query = 'select * from flor'
+
+    con.query(query, function(err, result){
+        if(err) throw err;
+        res.send(result)
+    })
+})
+
+app.get('/baseDeDatos/ejs', (req, res) => {
+    const query = 'select * from flor'
+    con.query(query, function (err, result) {
+        if (err) throw err;
+        res.render('index2', {listaFlores: result});
+      });
+})
+
 
 app.listen(port,()=>{
     console.log("API REST funcionando en http://localhost:"+port)
