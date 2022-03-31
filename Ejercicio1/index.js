@@ -12,13 +12,13 @@ app.get('/personajes', async (req,res) => {
     const jsonPuro = await respuesta.json()
     const datosJson = jsonPuro['results']
 
-
-    let objFinal = {
-        nombre : datosJson['name'],
-        foto :datosJson['image'],
-        id :datosJson['id'],
-        genero :datosJson['gender']
-    }
+        datosJson.forEach(element => {
+            
+            
+        });
+        
+    
+   
 
 })
 
