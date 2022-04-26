@@ -11,14 +11,8 @@ app.get('/personajes', async (req,res) => {
     const respuesta = await nodeFetch(url)
     const jsonPuro = await respuesta.json()
     const datosJson = jsonPuro['results']
-
-        datosJson.forEach(element => {
-            
-            
-        });
-        
     
-   
+    res.json(datosJson)
 
 })
 
@@ -42,13 +36,23 @@ app.get('/personajes/:id', async (req,res) => {
 })
 
 app.get('/count', async (req,res) => {
-    const {id} = req.params
     const url = "https://rickandmortyapi.com/api/character/"
     const respuesta = await nodeFetch(url)
     const datosJson = await respuesta.json()
 
     res.json(datosJson['info']['count'])
 
+})
+
+app.get('/personaje?nombre=:nombre', async(req,res)=> {
+
+const {nombre} = req.params
+const url = "https://rickandmortyapi.com/api/character/?name="+nombre
+const respuesta = await nodeFetch(url)
+const jsonPuro = await respuesta.json()
+const datosJson = jsonPuro['results']
+    
+    res.json(datosJson)
 })
 
 try{
